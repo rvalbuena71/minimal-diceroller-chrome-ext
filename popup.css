@@ -1,0 +1,28 @@
+/* Default (light) mode styles */
+body {
+  background-color: white;
+  color: black;
+}
+td {
+    min-width: 2em;
+}
+input, textarea {
+    display: block;
+    width: 100%;
+}
+button {
+    display: block;
+    width: 100%;
+}
+
+/* Dark mode styles applied when the user's system is in dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #6a627b;
+    color: white;
+  }
+  input, textarea {
+    background-color: #666;
+    color: white;
+  }
+}
