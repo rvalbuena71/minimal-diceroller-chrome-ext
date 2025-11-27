@@ -20,13 +20,47 @@ function buttonClickHandler(buttonElement) {
 }
 
 function hookClickEvents() {
+    //console.log("hookClickEvents");
     let buttonArray = document.getElementsByTagName('button');
     //    let buttonArray = document.getElementsByName('button');
     for (let i = 0; i < buttonArray.length; i++) {
+        //console.log(buttonArray[i].id);
         buttonArray[i].addEventListener("click", (event) => {
             buttonClickHandler(event.target);
         });
     }
 };
 
+function hookCountChangeEvents() {
+    //console.log("hookCountChangeEvents");
+    let countArray = document.getElementsByClassName('countField');
+    for (let i = 0; i < countArray.length; i++) {
+        countArray[i].addEventListener("change", (event) => {
+            // save when countField value is changed
+            // square brackets around keyname to use variable value
+            chrome.storage.sync.set({ [event.target.id] : event.target.value }).then(() => {
+                console.log("changed::"+event.target.id+":"+event.target.value);
+            }).catch(error => console.log(error));
+        });
+    }
+}
+
+async function loadStoredValues() {
+    //console.log("loadStoredValues");
+    let countArray = document.getElementsByClassName('countField');
+    // get all the stored values in one go
+    chrome.storage.sync.get().then((items) => {
+        //console.log(items);
+        // assign valid stored values to the corresponding field
+        for (const [key, value] of Object.entries(items)) {
+            console.log("loaded::"+key+":" + value);
+            if (value != undefined && value > 0) {
+                countArray[key].value = value;
+            }
+        }
+    }).catch(error => console.log(error));    
+}
+
+loadStoredValues();
 hookClickEvents();
+hookCountChangeEvents();
