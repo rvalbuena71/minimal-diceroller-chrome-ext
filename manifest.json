@@ -1,7 +1,7 @@
 {
   "name": "Minimal Dice Roller",
   "description": "Simple no-frills RPG/polyhedral dice roller",
-  "version": "0.1",
+  "version": "0.2",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html",
@@ -12,5 +12,6 @@
     "32": "icon32.png",
     "48": "icon48.png",
     "128": "icon128.png"
-  }
+  },
+  "permissions": ["storage"]
 }
