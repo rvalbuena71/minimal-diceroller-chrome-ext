@@ -4,7 +4,7 @@ body {
   color: black;
 }
 td {
-    min-width: 2em;
+    min-width: 3em;
 }
 input, textarea {
     display: block;
