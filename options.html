@@ -1,0 +1,39 @@
+<html>
+<head>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div>
+        <fieldset>
+            <legend>General</legend>
+            <table>
+            <tr>
+                <td><input type="checkbox" id="save-results" class="cBox"></td>
+                <td><label for="save-results">Save last rolled results</label></td>
+            </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>Common Dice</legend>
+            <table>
+            <tr>
+                <td><input type="checkbox" id="show-common" class="cBox" data-type="commonDice"></td>
+                <td><label for="show-common">Select all</label></td>
+            </tr>
+            </table>
+            <div id="commonDice"></div>
+        </fieldset>
+        <fieldset>
+            <table>
+            <tr>
+                <td><input type="checkbox" id="show-extra" class="cBox" data-type="extraDice"></td>
+                <td><label for="show-extra">Select all</label></td>
+            </tr>
+            </table>
+            <legend>Extra Dice</legend>
+            <div id="extraDice"></div>
+        </fieldset>
+    </div>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
