@@ -2,9 +2,16 @@
 body {
   background-color: white;
   color: black;
+  white-space: nowrap;
+  /*
+  width: fit-content;
+  height: fit-content;
+  inline-size: fit-content;
+  block-size: fit-content;
+  */
 }
-td {
-    min-width: 3em;
+table {
+  text-align: left;
 }
 input, textarea {
     display: block;
@@ -14,7 +21,33 @@ button {
     display: block;
     width: 100%;
 }
-
+.countCell {
+  width: 4em;
+}
+.countField {
+  display: block;
+  width: 4em;
+}
+.resultField{
+  display: block;
+  width: 4em;
+}
+.checkCell {
+  width: 1.5em;
+  margin: auto;
+  display: flex;
+  text-align: center;
+}
+.checkbox {
+  width: 1.5em;
+  margin: auto;
+  display: flex;
+  vertical-align: middle;
+  position: relative;
+}
+.centeredText {
+  text-align: center;
+}
 /* Dark mode styles applied when the user's system is in dark mode */
 @media (prefers-color-scheme: dark) {
   body {
