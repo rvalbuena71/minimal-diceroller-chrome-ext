@@ -19,13 +19,13 @@ export function loadAllSettings() {
 
 // save all the config settings from the given Map
 export function saveAllSettings(settings) {
-    console.log("saveAllSettings START");
-        return new Promise((resolve) => {
-            settings.forEach((value, key) => {
-            // square brackets around keyname to use variable value
-            chrome.storage.sync.set({ [key] : value }).then(() => {
-                    console.log("changed::"+key+":"+value);
-                }).catch(error => console.log(error));
+    return new Promise((resolve) => {
+        console.log("saveAllSettings START");
+        settings.forEach((value, key) => {
+        // square brackets around keyname to use variable value
+        chrome.storage.sync.set({ [key] : value }).then(() => {
+                console.log("changed::"+key+":"+value);
+            }).catch(error => console.log(error));
         });
         console.log("saveAllSettings END");
         resolve(true);
@@ -43,20 +43,12 @@ export function saveOneSetting(key, value) {
 export function isNumber(val) {
     return Number.parseInt(val) != NaN;
 }
-/*
-export function parseFromSettings(keyList, settings) {
-    let result = new Map();
+
+export function parseFromSettings(targetMap, keyList, settings) {
     keyList.forEach((key) => {
-        result.set(key, JSON.parse(settings.get(key)));
+        targetMap.set(key, JSON.parse(settings.get(key)));
     });
-    return result;
-}
-*/
-export function parseFromSettings(map, keyList, settings) {
-    keyList.forEach((key) => {
-        map.set(key, JSON.parse(settings.get(key)));
-    });
-    return map;
+    return targetMap;
 }
 
 export function parseOneFromSettings(key, settings) {
