@@ -35,13 +35,12 @@ button {
 .checkCell {
   width: 1.5em;
   margin: auto;
-  display: flex;
   text-align: center;
+  vertical-align: middle;
 }
 .checkbox {
   width: 1.5em;
   margin: auto;
-  display: flex;
   vertical-align: middle;
   position: relative;
 }
