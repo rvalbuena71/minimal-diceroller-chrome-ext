@@ -1,6 +1,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="popup.css">
+  <title>Minimal Dice Roller Options</title>
 </head>
 <body>
     <div>
@@ -8,8 +9,8 @@
             <legend>General</legend>
             <table>
             <tr>
-                <td><input type="checkbox" id="save-results" class="cBox"></td>
-                <td><label for="save-results">Save last rolled results</label></td>
+                <td class="checkCell" ><input type="checkbox" id="save-results" class="cBox"></td>
+                <td><label for="save-results"  id="save-results-label">Save last rolled results</label></td>
             </tr>
             </table>
         </fieldset>
@@ -17,8 +18,8 @@
             <legend>Common Dice</legend>
             <table>
             <tr>
-                <td><input type="checkbox" id="show-common" class="cBox" data-type="commonDice"></td>
-                <td><label for="show-common">Select all</label></td>
+                <td class="checkCell" ><input type="checkbox" id="show-common" class="cBox" data-type="commonDice"></td>
+                <td><label for="show-common" id="show-common-label" >Select all</label></td>
             </tr>
             </table>
             <div id="commonDice"></div>
@@ -26,8 +27,8 @@
         <fieldset>
             <table>
             <tr>
-                <td><input type="checkbox" id="show-extra" class="cBox" data-type="extraDice"></td>
-                <td><label for="show-extra">Select all</label></td>
+                <td class="checkCell" ><input type="checkbox" id="show-extra" class="cBox" data-type="extraDice"></td>
+                <td><label for="show-extra" id="show-extra-label" >Select all</label></td>
             </tr>
             </table>
             <legend>Extra Dice</legend>

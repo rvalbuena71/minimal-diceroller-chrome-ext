@@ -7,7 +7,6 @@ var diceList;
 function buildTableStart() {
     return `<table class="mainTable">`+
     `<tr>
-      <!--<td>RowID</td>-->
       <td>Show</td>
       <td>Type</td>
       <td >Min</td>
@@ -47,11 +46,20 @@ function buildExtraDiceTable(diceDataList){
 };
 
 function buildRow2(keyId, dice, extraClass) {
-    console.log(name + " : " + JSON.stringify(dice));
-    return `<tr id="${keyId}">
-    <!--<td>${keyId}</td>-->
+    console.log(keyId + " : " + JSON.stringify(dice));
+    // handle special case
+    if (dice.name == "DF") {
+        return `<tr id="${keyId}">
     <td class="checkCell" ><input type="checkbox" class="checkbox cBox ${extraClass}" id="show-${keyId}"></td>
-    <td><input id="type-${keyId}" data-type="${keyId}" value="${dice.name}" size="8" ></td>
+    <td><div id="type-${keyId}" data-type="${keyId}" >${dice.name}</div></td>
+    <td><div id="min-${keyId}" >${dice.min}</div></td>
+    <td><div id="max-${keyId}" >${dice.max}</div></td>
+    <td></td>
+    </tr>`;
+    }
+    return `<tr id="${keyId}">
+    <td class="checkCell" ><input type="checkbox" class="checkbox cBox ${extraClass}" id="show-${keyId}"></td>
+    <td><div id="type-${keyId}" data-type="${keyId}" >${dice.name}</div></td>
     <td><input id="min-${keyId}" value="${dice.min}" size="4" type="number" class="countField minField"></td>
     <td><input id="max-${keyId}" value="${dice.max}" size="4" min="1" type="number" class="countField maxField"></td>
     <td><button id="reset-${keyId}" class="resetbutton">Reset</button></td>
@@ -112,12 +120,24 @@ function hookChangeEvents(storedSettings) {
         // 
         selectAllHandler(event.target.id, event.target.checked);
     });
+    let typeArray = document.getElementsByClassName('typeField');
+    for (let i = 0; i < typeArray.length; i++) {
+        typeArray[i].addEventListener("change", (event) => {
+            // 
+            var keyId = event.target.closest("tr").id;
+            console.log(keyId);
+            saveOneRow(keyId);
+        });
+    }
     let minArray = document.getElementsByClassName('minField');
     for (let i = 0; i < minArray.length; i++) {
         minArray[i].addEventListener("change", (event) => {
             // 
             var keyId = event.target.closest("tr").id;
-            console.log(keyId);
+            var minFieldVal = document.getElementById("min-"+keyId).value;
+            var maxFieldVal = document.getElementById("max-"+keyId).value;
+            document.getElementById("type-"+keyId).innerText = "D" + DieRoller.countSides({ min: minFieldVal, max: maxFieldVal });
+
             saveOneRow(keyId);
         });
     }
@@ -126,6 +146,10 @@ function hookChangeEvents(storedSettings) {
         maxArray[i].addEventListener("change", (event) => {
             // 
             var keyId = event.target.closest("tr").id;
+            var minFieldVal = document.getElementById("min-"+keyId).value;
+            var maxFieldVal = document.getElementById("max-"+keyId).value;
+            document.getElementById("type-"+keyId).innerText = "D" + DieRoller.countSides({ min: minFieldVal, max: maxFieldVal });
+
             saveOneRow(keyId);
         });
     }
@@ -144,7 +168,7 @@ function saveOneRow(keyId){
     var editedDice = diceList.get(keyId);
     var minFieldVal = document.getElementById("min-"+keyId).value;
     var maxFieldVal = document.getElementById("max-"+keyId).value;
-    var nameFieldVal = document.getElementById("type-"+keyId).value;
+    var nameFieldVal = document.getElementById("type-"+keyId).innerText;
     editedDice.min = Number.parseInt(minFieldVal);
     editedDice.max = Number.parseInt(maxFieldVal);
     editedDice.name = nameFieldVal;
@@ -152,7 +176,7 @@ function saveOneRow(keyId){
 };
 
 // restore dice displayed settings from original defaults
-function resetOneRow(targetId){
+function resetOneRow(keyId){
     var originalDice = findDefaultDice(keyId);
     saveOneSetting(keyId,originalDice);
     var minField = document.getElementById("min-"+keyId);
@@ -160,7 +184,7 @@ function resetOneRow(targetId){
     var nameField = document.getElementById("type-"+keyId);
     minField.value = originalDice.min;
     maxField.value = originalDice.max;
-    nameField.value = originalDice.name;
+    nameField.innerText = originalDice.name;
 }
 
 function assignValues(storedSettings) {
@@ -173,6 +197,7 @@ function assignValues(storedSettings) {
 
 function selectAllHandler(id, isChecked) {
     console.log("selectAllHandler");
+    let labels = [ "Select All", "Unselect All" ];
     let dataType = document.getElementById(id).dataset.type;
     console.log(dataType);
     console.log(isChecked);
@@ -181,6 +206,7 @@ function selectAllHandler(id, isChecked) {
         checkboxArray[i].checked = isChecked;
         checkboxArray[i].dispatchEvent(new Event('change', { bubbles: true }));
     }
+    document.getElementById(id+"-label").innerText = labels[isChecked == true ? 1 : 0];
 };
 
 
