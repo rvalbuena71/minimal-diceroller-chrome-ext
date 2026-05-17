@@ -40,6 +40,14 @@ export function saveOneSetting(key, value) {
     }).catch(error => console.log(error));
 }
 
+export function removeOneSetting(key) {
+    console.log("removeOneSetting");
+    // 
+    chrome.storage.sync.remove(key).then(() => {
+        console.log("removed::"+key);
+    }).catch(error => console.log(error));
+}
+
 export function isNumber(val) {
     return Number.parseInt(val) != NaN;
 }
