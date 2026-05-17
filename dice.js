@@ -14,7 +14,7 @@ export class DieRoller {
     }
 
     static countSides(dice) {
-        return (dice.max - dice.min) +1;
+        return ((dice.max - dice.min) +1);
     }
 
     static isValid(dice) {
@@ -122,14 +122,14 @@ export const extraDice = [
 ];
 
 export const diceValues = [
-    {"id":"dice01", "name":"D4",  "min":1, "max":4},
-    {"id":"dice02", "name":"D6",  "min":1, "max":6},
-    {"id":"dice03", "name":"D8",  "min":1, "max":8},
-    {"id":"dice04", "name":"D10", "min":1, "max":10},
-    {"id":"dice05", "name":"D12", "min":1, "max":12},
-    {"id":"dice06", "name":"D20", "min":1, "max":20},
-    {"id":"dice07", "name":"D100","min":1, "max":100},
-    {"id":"dice08", "name":"DF",  "min":-1,"max":1},
+    {"id":"dice01", "name":"DF",  "min":-1,"max":1},
+    {"id":"dice02", "name":"D4",  "min":1, "max":4},
+    {"id":"dice03", "name":"D6",  "min":1, "max":6},
+    {"id":"dice04", "name":"D8",  "min":1, "max":8},
+    {"id":"dice05", "name":"D10", "min":1, "max":10},
+    {"id":"dice06", "name":"D12", "min":1, "max":12},
+    {"id":"dice07", "name":"D20", "min":1, "max":20},
+    {"id":"dice08", "name":"D100","min":1, "max":100},
     {"id":"dice09", "name":"D2",  "min":1, "max":2},
     {"id":"dice10", "name":"D3",  "min":1, "max":3},
     {"id":"dice11", "name":"D5",  "min":1, "max":5},
@@ -175,8 +175,8 @@ export function getDiceDataByUniqueID(){
     return diceMap;
 }
 
-export function sortDiceMapByMax(diceMap) {
-    return new Map([...diceMap.entries()].sort((a,b) =>{
+export function sortDiceMapByMax(sourceMap) {
+    return new Map([...sourceMap.entries()].sort((a,b) =>{
             return a[1].max - b[1].max;
         }))
 }
