@@ -1,15 +1,16 @@
 import { DieRoller, diceKeys, diceValues, getDiceDataByUniqueID, sortDiceMapByMax, commonDice, extraDice } from './dice.js';
-import { loadAllSettings, saveAllSettings, saveOneSetting, parseFromSettings } from './common.js';
+import { loadAllSettings, saveAllSettings, saveOneSetting, parseFromSettings, removeOneSetting } from './common.js';
 
 // diceList will be populated on page load
 var diceList;
+var sortedList;
 
 function buildRow2(keyId, dice) {
     console.log(keyId + " : " + JSON.stringify(dice));
     return `<tr id="${keyId}">
     <td><input id="count-${keyId}" value="1" size="2" min="1" type="number" class="countField"></td>`+
-    `<td><button id="roll-${keyId}" data-type="${dice.name}" class="rollbutton">${dice.name}</button></td>`+
-    `<td class="checkCell" ><input type="checkbox" class="checkbox" id="percentile-${keyId}"></td>`+
+    `<td><button id="roll-${keyId}" data-id="${keyId}" class="rollbutton">${dice.name}</button></td>`+
+    `<td class="checkCell" ><input type="checkbox" class="checkbox" id="percentile-${keyId}" ${dice.name == "DF" ? "disabled" : ""} ></td>`+
     `<td><input id="result-${keyId}" size="4" class="resultField"></td>
     </tr>`;
 };
@@ -69,21 +70,25 @@ function clearAllButtonClickHandler() {
 };
 
 function rollButtonClickHandler(buttonElement) {
-    // use data-type tag to find input controls that go with the clicked button
-    var diceType = buttonElement.dataset.type;
-    var keyId = buttonElement.closest("tr").id;
+    // keyid will tell us dice type to use
+    var keyId = buttonElement.dataset.id;
     console.log(keyId);
-    // input box gives us the number of dice to roll (defaults to 1)
+    // countfield gives us the number of dice to roll (defaults to 1)
     var num = Number.parseInt(document.getElementById('count-' + keyId).value);
+    // retrieve dicetype
     var dice = diceList.get(keyId);
+    // do the rolls
     var diceResult = DieRoller.rollCount(dice,num);
+    // should we treat this as percentile instead of sum
     var isPercentile = document.getElementById('percentile-' + keyId).checked;
     var resultField = document.getElementById('result-' + keyId);
     resultField.value = (isPercentile == true) ? diceResult.percent : diceResult.total;
+    // fire the resultfield event
     resultField.dispatchEvent(new Event('input', { bubbles: true }));
     var logwindow = document.getElementById('logwindow');
     // show the individual rolls
     logwindow.value = diceResult.rolls;
+    // fire the logwindow event
     logwindow.dispatchEvent(new Event('input', { bubbles: true }));
 };
 
@@ -198,11 +203,15 @@ function assignValues(storedSettings) {
 
 function buildPopupUI(settings){
     return new Promise((resolve) => {
-        // sort the dice list by "max" value
-        diceList = sortDiceMapByMax(getDiceDataByUniqueID());
+        // retrieve original dice data
+        diceList = getDiceDataByUniqueID();
         console.log(diceList);
+        // merge in any user changed settings
         addDefaultKeys(diceList,settings);
-        buildMainTable(diceList,settings);
+        // sort the dice list by "max" value 
+        // *after* getting user changed settings
+        sortedList = sortDiceMapByMax(diceList);
+        buildMainTable(sortedList,settings);
         assignValues(settings);
         hookClickEvents(settings);
         hookChangeEvents(settings);
@@ -215,6 +224,7 @@ export function addDefaultKeys(diceList, settings){
     console.log("addDefaultKeys");
     diceList.forEach((dice) => {
         let checkKey = dice.id;
+        let checkName = dice.name;
         // is there a copy of this dice data in storage?
         let savedDice = settings.get(checkKey);
         if (savedDice == undefined) {
@@ -229,6 +239,20 @@ export function addDefaultKeys(diceList, settings){
             dice.min = Number.parseInt(savedDice.min);
             dice.max = Number.parseInt(savedDice.max);
         }
+        // is there an old saved count for this dice data?
+        let savedNum = settings.get("count-"+checkName);
+        if (savedNum != undefined) {
+            saveOneSetting("count-"+checkKey,savedNum);
+            settings.set("count-"+checkKey,Number.parseInt(savedNum));
+            removeOneSetting("count-"+checkName);
+        } 
+        else {
+            // special case for DF
+            if (checkName == "DF") {
+                saveOneSetting("count-"+checkKey,4);
+                settings.set("count-"+checkKey,Number.parseInt(4));
+            }
+        }
     });
     if (!settings.has("save-results")) {
         saveOneSetting("save-results",true);
@@ -239,7 +263,8 @@ export function addDefaultKeys(diceList, settings){
         // should this dice be shown?
         let checkKey = `show-${key}`;
         if (!settings.has(checkKey)) {
-            if (counter > 8) return;
+            // hide the extra dice by default
+            if (counter >= commonDice.length) return;
             saveOneSetting(checkKey,true);
             settings.set(checkKey,true);
         }
