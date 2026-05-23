@@ -1,6 +1,6 @@
 /* Default (light) mode styles */
 body {
-  background-color: white;
+  background-color: gainsboro;
   color: black;
   white-space: nowrap;
   /*
@@ -9,17 +9,22 @@ body {
   inline-size: fit-content;
   block-size: fit-content;
   */
+  font-family: sans-serif;
 }
 table {
   text-align: left;
 }
 input, textarea {
-    display: block;
-    width: 100%;
+  background-color: whitesmoke;
+  display: block;
+  width: 100%;
 }
 button {
     display: block;
     width: 100%;
+}
+fieldset {
+  border-color: darkgray;
 }
 .countCell {
   width: 4em;
