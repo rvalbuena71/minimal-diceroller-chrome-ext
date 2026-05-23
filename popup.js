@@ -6,7 +6,7 @@ var diceList;
 var sortedList;
 
 function buildRow2(keyId, dice) {
-    console.log(keyId + " : " + JSON.stringify(dice));
+    //console.log(keyId + " : " + JSON.stringify(dice));
     return `<tr id="${keyId}">
     <td><input id="count-${keyId}" value="1" size="2" min="1" type="number" class="countField"></td>`+
     `<td><button id="roll-${keyId}" data-id="${keyId}" class="rollbutton">${dice.name}</button></td>`+
@@ -30,7 +30,7 @@ function buildMainTable(diceData,settings) {
     var targetDiv = document.getElementById('mainDiv');
     if (targetDiv == undefined) return;
     console.log("buildMainTable START");
-    console.log(diceData);
+    //console.log(diceData);
     let tableHtml = 
     `<table class="mainTable">`+
     `<tr>
@@ -72,7 +72,7 @@ function clearAllButtonClickHandler() {
 function rollButtonClickHandler(buttonElement) {
     // keyid will tell us dice type to use
     var keyId = buttonElement.dataset.id;
-    console.log(keyId);
+    //console.log(keyId);
     // countfield gives us the number of dice to roll (defaults to 1)
     var num = Number.parseInt(document.getElementById('count-' + keyId).value);
     // retrieve dicetype
@@ -125,7 +125,7 @@ function assignCountFieldValues(storedSettings) {
 
 function assignResultFieldValues(storedSettings) {
     let isSaveResults = storedSettings.get('save-results');
-    console.log(storedSettings.get("save-results"));
+    //console.log(storedSettings.get("save-results"));
     if (isSaveResults == undefined || isSaveResults == false) return;
     let resultArray = document.getElementsByClassName('resultField');
     //console.log(countArray);
@@ -205,7 +205,7 @@ function buildPopupUI(settings){
     return new Promise((resolve) => {
         // retrieve original dice data
         diceList = getDiceDataByUniqueID();
-        console.log(diceList);
+        //console.log(diceList);
         // merge in any user changed settings
         addDefaultKeys(diceList,settings);
         // sort the dice list by "max" value 
@@ -233,7 +233,7 @@ export function addDefaultKeys(diceList, settings){
             settings.set(checkKey,dice);
         }
         else {
-            console.log("addDefaultKeys - overrding defaults :"+checkKey +": "+JSON.stringify(savedDice));
+            //console.log("addDefaultKeys - overrding defaults :"+checkKey +": "+JSON.stringify(savedDice));
             // copy any user-edited settings onto the dice
             dice.name = savedDice.name;
             dice.min = Number.parseInt(savedDice.min);
@@ -274,7 +274,7 @@ export function addDefaultKeys(diceList, settings){
 
 loadAllSettings()
     .then(function(result){ 
-        console.log(result);
+        //console.log(result);
         return buildPopupUI(result)
     })
     .catch(error => console.log(error));

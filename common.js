@@ -10,7 +10,7 @@ export function loadAllSettings() {
                 //console.log("loaded::"+key+":" + value);
                 result.set(key,value);
             }
-            console.log(result);
+            //console.log(result);
             console.log("loadAllSettings END");
             resolve(result);
         })
@@ -24,7 +24,7 @@ export function saveAllSettings(settings) {
         settings.forEach((value, key) => {
         // square brackets around keyname to use variable value
         chrome.storage.sync.set({ [key] : value }).then(() => {
-                console.log("changed::"+key+":"+value);
+                //console.log("changed::"+key+":"+value);
             }).catch(error => console.log(error));
         });
         console.log("saveAllSettings END");
@@ -36,7 +36,7 @@ export function saveOneSetting(key, value) {
     console.log("saveOneSetting");
     // square brackets around keyname to use variable value
     chrome.storage.sync.set({ [key] : value }).then(() => {
-        console.log("changed::"+key+":"+value);
+        //console.log("changed::"+key+":"+value);
     }).catch(error => console.log(error));
 }
 
@@ -44,7 +44,7 @@ export function removeOneSetting(key) {
     console.log("removeOneSetting");
     // 
     chrome.storage.sync.remove(key).then(() => {
-        console.log("removed::"+key);
+        //console.log("removed::"+key);
     }).catch(error => console.log(error));
 }
 

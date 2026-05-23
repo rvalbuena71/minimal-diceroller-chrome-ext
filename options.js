@@ -46,7 +46,7 @@ function buildExtraDiceTable(diceDataList){
 };
 
 function buildRow2(keyId, dice, extraClass) {
-    console.log(keyId + " : " + JSON.stringify(dice));
+    //console.log(keyId + " : " + JSON.stringify(dice));
     // handle special case
     if (dice.name == "DF") {
         return `<tr id="${keyId}">
@@ -113,7 +113,7 @@ function hookChangeEvents(storedSettings) {
     });
     document.getElementById("show-common").addEventListener("change", (event) => {
         // 
-        console.log(event.target.dataset.type);
+        //console.log(event.target.dataset.type);
         selectAllHandler(event.target.id, event.target.checked);
     });
     document.getElementById("show-extra").addEventListener("change", (event) => {
@@ -125,7 +125,7 @@ function hookChangeEvents(storedSettings) {
         typeArray[i].addEventListener("change", (event) => {
             // 
             var keyId = event.target.closest("tr").id;
-            console.log(keyId);
+            //console.log(keyId);
             saveOneRow(keyId);
         });
     }
@@ -199,8 +199,8 @@ function selectAllHandler(id, isChecked) {
     console.log("selectAllHandler");
     let labels = [ "Select All", "Unselect All" ];
     let dataType = document.getElementById(id).dataset.type;
-    console.log(dataType);
-    console.log(isChecked);
+    //console.log(dataType);
+    //console.log(isChecked);
     let checkboxArray = document.getElementsByClassName(dataType);
     for (let i = 0; i < checkboxArray.length; i++) {
         checkboxArray[i].checked = isChecked;
@@ -212,7 +212,7 @@ function selectAllHandler(id, isChecked) {
 
 loadAllSettings()
     .then(function(result){ 
-        console.log(result);
+        //console.log(result);
         return buildOptionsUI(result)
     })
     .catch(error => console.log(error));
