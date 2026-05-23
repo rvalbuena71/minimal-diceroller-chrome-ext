@@ -18,6 +18,7 @@ input, textarea {
   background-color: whitesmoke;
   display: block;
   width: 100%;
+  border-width: 1px;
 }
 button {
     display: block;
