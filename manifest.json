@@ -1,7 +1,7 @@
 {
   "name": "Minimal Dice Roller",
   "description": "Simple no-frills RPG/polyhedral dice roller",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html",
@@ -17,5 +17,13 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "minimaldiceroller@mozilla.org",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
 }
