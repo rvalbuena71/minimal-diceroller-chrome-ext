@@ -13,6 +13,7 @@ Icon was edited from Public Domain resource "Colorful Dices 128x128"\
 https://opengameart.org/content/colorful-dices-128x128
 
 ## History
-* 0.1 - Initial release
-* 0.2 - Inputs in "#" column now have spin buttons and reject non-numeric input, changed values are now saved to extension storage, popup width expanded slightly
-* 0.3 - Added extra dice definitions, added "percentile" checkbox option, added "Clear All" button, added Options page to allow customizing of dice definitions and to select which dice are shown in the popup
+* 0.1.0 - Initial release
+* 0.2.0 - Inputs in "#" column now have spin buttons and reject non-numeric input, changed values are now saved to extension storage, popup width expanded slightly
+* 0.3.0 - Added extra dice definitions, added "percentile" checkbox option, added "Clear All" button, added Options page to allow customizing of dice definitions and to select which dice are shown in the popup
+* 0.3.1 - Minor CSS adjustments (specified sans-serif font, made default light mode colors less bright, adjusted dark mode input field colors slightly), tested FireFox compatibility
