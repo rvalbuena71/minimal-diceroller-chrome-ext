@@ -5,18 +5,14 @@ import { addDefaultKeys } from './popup.js';
 var diceList;
 
 function buildTableStart() {
-    return `<table class="mainTable">`+
-    `<tr>
-      <td>Show</td>
-      <td>Type</td>
-      <td >Min</td>
-      <td >Max</td>
-      <td></td>
-    </tr>`;
-};
-
-function buildTableEnd() {
-    return `</table>`;
+    let tableHtml = document.createElement("table");
+    let row1 = tableHtml.insertRow(-1);
+    row1.insertCell(0).innerText = "Show";
+    row1.insertCell(1).innerText = "Type";
+    row1.insertCell(2).innerText = "Min";
+    row1.insertCell(3).innerText = "Max";
+    row1.insertCell(4);
+    return tableHtml;
 };
 
 function buildCommonDiceTable(diceDataList){
@@ -24,12 +20,11 @@ function buildCommonDiceTable(diceDataList){
     let counter = 0;
     diceDataList.forEach((value,key) => {
         if (counter < commonDice.length) {
-            tableHtml += buildRow2(key, value, 'commonDice');
+            buildRow2(key, value, 'commonDice', tableHtml);
         }
         counter++;
     });
-    tableHtml += buildTableEnd();
-    document.getElementById('commonDice').innerHTML = tableHtml;
+    document.getElementById('commonDice').appendChild(tableHtml);
 };
 
 function buildExtraDiceTable(diceDataList){
@@ -37,33 +32,91 @@ function buildExtraDiceTable(diceDataList){
     let counter = 0;
     diceDataList.forEach((value,key) => {
         if (counter >= commonDice.length) {
-            tableHtml += buildRow2(key, value, 'extraDice');
+            buildRow2(key, value, 'extraDice', tableHtml);
         }
         counter++;
     });
-    tableHtml += buildTableEnd();
-    document.getElementById('extraDice').innerHTML = tableHtml;
+    document.getElementById('extraDice').appendChild(tableHtml);
 };
 
-function buildRow2(keyId, dice, extraClass) {
+function buildRow2(keyId, dice, extraClass, targetTable) {
     //console.log(keyId + " : " + JSON.stringify(dice));
+    let newRow = targetTable.insertRow(-1);
+    newRow.id = keyId;
     // handle special case
     if (dice.name == "DF") {
-        return `<tr id="${keyId}">
-    <td class="checkCell" ><input type="checkbox" class="checkbox cBox ${extraClass}" id="show-${keyId}"></td>
-    <td><div id="type-${keyId}" data-type="${keyId}" >${dice.name}</div></td>
-    <td><div id="min-${keyId}" >${dice.min}</div></td>
-    <td><div id="max-${keyId}" >${dice.max}</div></td>
-    <td></td>
-    </tr>`;
+        let c0 = newRow.insertCell(0);
+        c0.setAttribute("class","checkCell");
+        let checkbox1 = document.createElement("input");
+        checkbox1.setAttribute("id","show-"+keyId);
+        checkbox1.setAttribute("type","checkbox");
+        checkbox1.setAttribute("class",`checkbox cBox ${extraClass}`);
+        c0.appendChild(checkbox1);
+
+        let c1 = newRow.insertCell(1);
+        let type1 = document.createElement("div");
+        type1.innerText = dice.name;
+        type1.setAttribute("id","type-"+keyId);
+        type1.setAttribute("data-type",keyId);
+        c1.appendChild(type1);
+
+        let c2 = newRow.insertCell(2);
+        let min1 = document.createElement("div");
+        min1.innerText = dice.min;
+        c2.appendChild(min1);
+        
+        let c3 = newRow.insertCell(3);
+        let max1 = document.createElement("div");
+        max1.innerText = dice.max;
+        c3.appendChild(max1);
+
+        let c4 = newRow.insertCell(4);
     }
-    return `<tr id="${keyId}">
-    <td class="checkCell" ><input type="checkbox" class="checkbox cBox ${extraClass}" id="show-${keyId}"></td>
-    <td><div id="type-${keyId}" data-type="${keyId}" >${dice.name}</div></td>
-    <td><input id="min-${keyId}" value="${dice.min}" size="4" type="number" class="countField minField"></td>
-    <td><input id="max-${keyId}" value="${dice.max}" size="4" min="1" type="number" class="countField maxField"></td>
-    <td><button id="reset-${keyId}" class="resetbutton">Reset</button></td>
-    </tr>`;
+    else {
+        let c0 = newRow.insertCell(0);
+        c0.setAttribute("class","checkCell");
+        let checkbox1 = document.createElement("input");
+        checkbox1.setAttribute("id","show-"+keyId);
+        checkbox1.setAttribute("type","checkbox");
+        checkbox1.setAttribute("class",`checkbox cBox ${extraClass}`);
+        c0.appendChild(checkbox1);
+
+        let c1 = newRow.insertCell(1);
+        let type1 = document.createElement("div");
+        type1.innerText = dice.name;
+        type1.setAttribute("id","type-"+keyId);
+        type1.setAttribute("data-type",keyId);
+        c1.appendChild(type1);
+
+        let c2 = newRow.insertCell(2);
+        let min1 = document.createElement("input");
+        min1.setAttribute("id","min-"+keyId);
+        min1.setAttribute("size",4);
+        min1.setAttribute("type","number");
+        min1.setAttribute("class","countField minField");
+        min1.setAttribute("data-type",keyId);
+        min1.value = dice.min;
+        c2.appendChild(min1);
+
+        let c3 = newRow.insertCell(3);
+        let max1 = document.createElement("input");
+        max1.setAttribute("id","max-"+keyId);
+        max1.setAttribute("size",4);
+        max1.setAttribute("min",1);
+        max1.setAttribute("type","number");
+        max1.setAttribute("class","countField maxField");
+        max1.setAttribute("data-type",keyId);
+        max1.value = dice.max;
+        c3.appendChild(max1);
+
+        let c4 = newRow.insertCell(4);
+        let button1 = document.createElement("button");
+        button1.setAttribute("id","reset-"+keyId)
+        button1.setAttribute("class","resetbutton");
+        button1.setAttribute("data-type",keyId);
+        button1.innerText = "Reset";
+        c4.appendChild(button1);
+    }
 };
 
 function buildOptionsUI(settings){

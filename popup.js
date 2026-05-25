@@ -5,24 +5,65 @@ import { loadAllSettings, saveAllSettings, saveOneSetting, parseFromSettings, re
 var diceList;
 var sortedList;
 
-function buildRow2(keyId, dice) {
+function buildRow2(keyId, dice, targetTable) {
     //console.log(keyId + " : " + JSON.stringify(dice));
-    return `<tr id="${keyId}">
-    <td><input id="count-${keyId}" value="1" size="2" min="1" type="number" class="countField"></td>`+
-    `<td><button id="roll-${keyId}" data-id="${keyId}" class="rollbutton">${dice.name}</button></td>`+
-    `<td class="checkCell" ><input type="checkbox" class="checkbox" id="percentile-${keyId}" ${dice.name == "DF" ? "disabled" : ""} ></td>`+
-    `<td><input id="result-${keyId}" size="4" class="resultField"></td>
-    </tr>`;
+    let newRow = targetTable.insertRow(-1);
+
+    let c0 = newRow.insertCell(0);
+    let count1 = document.createElement("input");
+    count1.setAttribute("id","count-"+keyId);
+    count1.setAttribute("size",2);
+    count1.setAttribute("min",1);
+    count1.setAttribute("type","number");
+    count1.setAttribute("class","countField");
+    count1.value = 1;
+    c0.appendChild(count1);
+
+    let c1 = newRow.insertCell(1);
+    let button1 = document.createElement("button");
+    button1.setAttribute("id","roll-"+keyId)
+    button1.setAttribute("data-id",keyId)
+    button1.setAttribute("class","rollbutton");
+    button1.innerText = dice.name;
+    c1.appendChild(button1);
+
+    let c2 = newRow.insertCell(2);
+    let checkbox1 = document.createElement("input");
+    checkbox1.setAttribute("id","percentile-"+keyId);
+    checkbox1.setAttribute("type","checkbox");
+    checkbox1.setAttribute("class","checkbox");
+    c2.appendChild(checkbox1);
+    if (dice.name == "DF") {
+        checkbox1.setAttribute("disabled","true");        
+    }
+
+    let c3 = newRow.insertCell(3);
+    let result1 = document.createElement("input");
+    result1.setAttribute("id","result-"+keyId);
+    result1.setAttribute("size",4);
+    result1.setAttribute("class","resultField");
+    c3.appendChild(result1);
 };
 
-function buildLogWindow() {
-    return `<tr>
-      <td colspan="2">Dice Pool</td>
-      <td colspan="2"><button id="clearAll" title="Clear all results fields">Clear All</button></td>
-    </tr>
-    <tr>
-      <td colspan="4"><input id="logwindow"></input></td>
-    </tr>`;
+function buildLogWindow(targetTable) {
+    let logWindowRow1 = targetTable.insertRow(-1);
+    let c0 = logWindowRow1.insertCell(0);
+    c0.colSpan = 2;
+    c0.innerText = "Dice Pool";
+
+    let c1 = logWindowRow1.insertCell(1);
+    c1.colSpan = 2;
+    let clearAll = document.createElement("button");
+    c1.appendChild(clearAll);
+    clearAll.title = "Clear all results fields";
+    clearAll.innerText = "Clear All";
+
+    let logWindowRow2 = targetTable.insertRow(-1);
+    let c2 = logWindowRow2.insertCell(0);
+    c2.colSpan = 4;
+    let logwindow = document.createElement("input");
+    c2.appendChild(logwindow);
+    logwindow.id = "logwindow";
 };
 
 function buildMainTable(diceData,settings) {
@@ -31,26 +72,32 @@ function buildMainTable(diceData,settings) {
     if (targetDiv == undefined) return;
     console.log("buildMainTable START");
     //console.log(diceData);
-    let tableHtml = 
-    `<table class="mainTable">`+
-    `<tr>
-      <td title="Number of dice to roll">#</td>
-      <td>Type</td>
-      <td class="centeredText" title="Treat results as 'percentile dice'">%</td>
-      <td>Result</td>
-    </tr>`;
+    let tableHtml = document.createElement("table");
+    tableHtml.class = "mainTable";
+
+    let headerRow = tableHtml.insertRow(0);
+    let c0 = headerRow.insertCell(0);
+    c0.title = "Number of dice to roll";
+    c0.innerText = "#";
+    let c1 = headerRow.insertCell(1);
+    c1.innerText = "Type";
+    let c2 = headerRow.insertCell(2);
+    c2.title = "Treat as 'percentile'";
+    c2.innerText = "%";
+    c2.setAttribute("class","checkCell");
+    let c3 = headerRow.insertCell(3);
+    c3.innerText = "Result";
+
     diceData.forEach((value,key) => {
         let showRow = settings.get(`show-${key}`);
         if (showRow != undefined && showRow == true) {
-            tableHtml += buildRow2(key, value);
+            buildRow2(key, value, tableHtml);
         }
     });
 
-    tableHtml += buildLogWindow();
-    tableHtml += `</table>`;
-    //tableHtml += buildButtonTable();
+    buildLogWindow(tableHtml);
     //console.log(tableHtml);
-    targetDiv.innerHTML = tableHtml;
+    targetDiv.appendChild(tableHtml);
     console.log("buildMainTable END");
 };
 
